@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'IRANSans', Tahoma, Arial, sans-serif;
+      text-align: right;
+      direction: rtl;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+  
+    #quiz-container {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  
+    .question {
+      margin-bottom: 20px;
+    }
+  
+    .options {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .option {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  
+    #chart-container {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      overflow: hidden;
+      max-height: 400px;
+      margin-bottom: 20px;
+    }
+  
+    canvas {
+      border-radius: 10px;
+      border: 2px solid #fff;
+    }
+  
+    #chart-legend {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+  
+    #chart-legend li {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+    }
+  
+    #chart-legend span {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin-right: 5px;
+    }
+  
+    #backButton {
+      margin-top: 10px;
+      display: block;
+    }
+  
+    #personal-info-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    #personal-info-container label {
+      margin-bottom: 5px;
+    }
+  
+    #personal-info-container input {
+      padding: 8px;
+      margin-bottom: 15px;
+      width: 80%;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+  
+    #personal-info-container button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 80%;
+      font-size: 16px;
+    }
+  
+    #personal-info-container button:hover {
+      background-color: #45a049;
+    }
+    #header-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #header-image {
+      max-width: 100px; /* Adjust the width as needed */
+      max-height: 100px; /* Adjust the height as needed */
+      margin-bottom: 10px;
+    }
+
+    #signature {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+  
+  <title>Quiz App</title>
+</head>
+<body>
+  <div id="header-container">
+    <!-- Small Image -->
+    <img id="header-image" src="C:\Users\Mohsen\Desktop\fateme-darenjani-shirazi.webp" alt="Dr.Darenjani">
+    
+    <!-- Your Name as a Signature -->
+    <div id="signature">دکتر فاطمه دارنجانی شیرازی
+    </div>
+  </div>
+
+
+  <div id="quiz-container">
+    <!-- Personal Information Form -->
+    <div id="personal-info-container">
+      <label for="name">نام:</label>
+      <input type="text" id="name" name="name" required><br>
+
+      <label for="family-name">نام خانوادگی:</label>
+      <input type="text" id="family-name" name="family-name" required><br>
+
+      <label for="national-code">کد ملی:</label>
+      <input type="text" id="national-code" name="national-code" required><br>
+
+      <label for="age">سن:</label>
+      <input type="number" id="age" name="age" required><br>
+
+      <label for="education">تحصیلات:</label>
+      <input type="text" id="education" name="education" required><br>
+
+      <label for="job">شغل:</label>
+      <input type="text" id="job" name="job" required><br>
+
+      <label for="marriage-date">تاریخ ازدواج:</label>
+      <input type="date" id="marriage-date" name="marriage-date" required><br>
+
+      <button onclick="startQuiz()">شروع آزمون</button>
+    </div>
+
+    <!-- Quiz Content -->
+    <div id="question-container" class="question"></div>
+    <div id="options-container" class="options"></div>
+    <div id="chart-container">
+      <canvas id="chart" width="300" height="300"></canvas>
+      <ul id="chart-legend"></ul>
+    </div>
+    <button id="backButton" style="margin-top: 10px;">بازگشت به سوال قبلی</button>
+  </div>
+  <script>
+const questions = [
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'بدون هیچ دلیلی؛ یه متن ،‌ ایمیل ،‌ پیامک و ... عاشقانه از معشوقم دریافت می‌کنم', letter: 'A' },
+          b: { text: 'همدیگر رو بغل می‌کنیم', letter: 'E' }
+        }
+      },
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: '   می‌تونیم با هم تنهایی وقت بگذرونیم،‌ فقط من و اون.بدون هیچ دلیلی؛ یه متن ،‌ ایمیل ،‌ پیامک و ... عاشقانه از معشوقم دریافت می‌کنم', letter: 'B' },
+          b: { text: 'برای کمک به من یه کاری می‌کنه.همدیگر رو بغل می‌کنیم', letter: 'D' }
+        }
+      },
+
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'به نشونه‌ی عشقمون بهم هدیه می‌ده.', letter: 'C' },
+          b: { text: 'وقت فراغتمون رو با هم می‌گذرونیم.', letter: 'B' }
+        }
+      },
+      
+        //Q4
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'یهویی واسم یه کاری انجام می‌ده،‌ مثلا لباسارو می‌شوره یا ماشینمو بنزین می‌زنه.', letter: 'D' },
+          b: { text: 'همدیگر رو لمس می‌کنیم.', letter: 'E' }
+        }
+      },
+        //Q5
+
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'وقتی تو جمعیم دستم رو تو دستش می‌گیره.', letter: 'E' },
+          b: { text: 'منو با یه هدیه غافلگیر می‌کنه.', letter: 'C' }
+        }
+      },
+        //Q6
+
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'نزدیکشم حتی اگه کار خاصی انجام ندیم.', letter: 'B' },
+          b: { text: 'دست همو می‌گیریم.', letter: 'E' }
+        }
+      },
+        //Q7
+
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'بهم یه هدیه می‌ده.', letter: 'C' },
+          b: { text: 'بهم می‌گه؛ دوستت دارم!', letter: 'A' }
+        }
+      },
+        //Q8
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'نزدیکش می‌شینم.', letter: 'E' },
+          b: { text: 'بدون هیچ دلیلی ازم تعریف کنه.', letter: 'A' }
+        }
+      },
+        //Q9
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'بریم بیرون بگردیم.', letter: 'B' },
+          b: { text: 'بدون اینکه انتظارشو داشته باشم بهم هدیه بده.', letter: 'C' }
+        }
+      },
+        //Q10
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'بهم بگه؛ بهت افتخار می‌کنم.', letter: 'A' },
+          b: { text: 'تو یکی از کارام کمکم کنه.', letter: 'D' }
+        }
+      },
+        //Q11
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'با هم یه کاری انجام بدیم.', letter: 'B' },
+          b: { text: 'حرف‌های دلگرم کننده ازش بشنوم.', letter: 'A' }
+        }
+      },
+        //Q12
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'به جای اینکه حرف از انجام کارای خوب بزنه، در عمل برام کارای خوبی انجام بده.', letter: 'D' },
+          b: { text: 'بغلم کنه و حس کنم بهش متصلم.', letter: 'E' }
+        }
+      },
+        //Q13
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'منو تشویق کنه.', letter: 'A' },
+          b: { text: 'یه چیزی بهم بده که بفهمم واقعا به یادم بوده.', letter: 'C' }
+        }
+      },
+        //Q14
+      { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'بتونم فقط کنارش باشم.', letter: 'B' },
+          b: { text: 'پشتم رو نوازش کنه یا ماساژم بده.', letter: 'E' }
+        }
+      },
+        //Q15
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'به یکی از کارایی که با موفقیت انجام دادم واکنش مثبتی نشون بده.', letter: 'A' },
+          b: { text: 'برام کاری بکنه که بدونم خودش اون کار رو دوست نداره.', letter: 'D' }
+        }
+      },
+        //Q16
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'همدیگر رو اغلب اوقات ببوسیم.', letter: 'A' },
+          b: { text: 'حس کنم به چیزهایی که برام مهمه اونم علاقه داره.', letter: 'B' }
+        }
+      },
+        //Q17
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'با من روی پروژه‌ای که باید تموم کنم کار کنه.', letter: 'D' },
+          b: { text: 'بهم یه هدیه‌ی جالب بده.', letter: 'C' }
+        }
+      },
+        //Q18
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'از ظاهرم تعریف کنه.', letter: 'A' },
+          b: { text: 'وقت بذاره و به حرفام گوش بده و واقعا حسم رو بفهمه.', letter: 'B' }
+        }
+      },
+        //Q19
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'تو جمع یا بیرون از خونه دست منو بگیره یا نوازشم کنه.', letter: 'E' },
+          b: { text: 'بهم تو یکی از کارام کمک کنه.', letter: 'D' }
+        }
+      },
+        //Q20
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'بیشتر از حد مسئولیتش یه کارایی بکنه ( مثلا کمک تو کار خونه یا مسائل کاری...)', letter: 'D' },
+          b: { text: 'هدیه‌ای ازش بگیرم که بدونم واسه خریدنش روش فکر کرده.', letter: 'C' }
+        }
+      },
+        //Q21
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'وقتی دارم باهاش حرف می‌زنم سرش تو گوشیش نیست.', letter: 'B' },
+          b: { text: 'بهم کمک می‌کنه تا فشاری که رومه کاهش پیدا کنه.', letter: 'D' }
+        }
+      },
+        //Q22
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'منتظر یه عید یا مناسبت باشم که می‌دونم اون روز بهم هدیه می‌ده.', letter: 'C' },
+          b: { text: 'بهم بگه؛ ازت ممنونم....', letter: 'A' }
+        }
+      },
+        //Q23
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'برام از سفری که تنهایی رفته یه سوغاتی بیاره.', letter: 'C' },
+          b: { text: ' تو کاری که استرس دارم سر وقت انجامش بدم، کمکم می‌کنه.', letter: 'D' }
+        }
+      },
+        //Q24
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'وقتی حرف می‌زنم تو حرفم نمی‌پره.', letter: 'B' },
+          b: { text: 'هدیه دادن بخش مهمی از رابطه‌مونه.', letter: 'C' }
+        }
+      },
+        //Q25
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'وقتی می‌دونه خسته‌ام بهم کمک می‌کنه.', letter: 'D' },
+          b: { text: 'باهاش برم به جایی و با هم وقت بگذرونیم.', letter: 'B' }
+        }
+      },
+        //Q26
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: ' از لحاظ تماس بدنی و روابط جنسی با هم راحتیم.', letter: 'E' },
+          b: { text: 'توی یه روز معمولی بهم یه هدیه‌ی کوچک بده.', letter: 'C' }
+        }
+      },
+        //Q27
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'منو با حرفاش تشویق کنه..', letter: 'A' },
+          b: { text: 'توی یه فعالیت یا سرگرمی مشترک باهاش وقت بگذرونم.', letter: 'B' }
+        }
+      },
+        //Q28
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'منو با یه هدیه‌ی کوچک برای تشکر، سورپرایز کنه.', letter: 'C' },
+          b: { text: 'در طول یه روز معمولی همدیگر رو زیاد لمس کنیم.', letter: 'E' }
+        }
+      },
+        //Q29
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'بهم کمک می‌کنه‌، حتی وقتایی که سرش شلوغه.', letter: 'D' },
+          b: { text: 'ازم تشکر می‌کنه و می‌‌گه که قدرم رو می‌دونه.', letter: 'A' }
+        }
+      },
+        //Q30
+        { 
+        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+        options: {
+          a: { text: 'بعد اینکه یه مدت از هم دور بودیم، همدیگر رو بغل کنیم.', letter: 'E' },
+          b: { text: 'بهم بگه چقدر براش مهمم.', letter: 'A' }
+        }
+      },
+
+
+      // Add more questions here
+    ];
+
+    let currentQuestionIndex = 0;
+    const userAnswers = {};
+    const personalInfoContainer = document.getElementById('personal-info-container');
+    const quizContainer = document.getElementById('quiz-container');
+    const questionContainer = document.getElementById('question-container');
+    const optionsContainer = document.getElementById('options-container');
+    const chartContainer = document.getElementById('chart-container');
+    const chartCanvas = document.getElementById('chart');
+    const chartLegend = document.getElementById('chart-legend');
+    const backButton = document.getElementById('backButton');
+    let myChart;
+
+    backButton.addEventListener('click', goBack);
+
+    function goBack() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        showQuestion(currentQuestionIndex);
+        clearChart();
+      }
+    }
+
+    function showQuestion(index) {
+      const currentQuestion = questions[index];
+      questionContainer.textContent = currentQuestion.question;
+      optionsContainer.innerHTML = '';
+
+      for (const key in currentQuestion.options) {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'option';
+        optionDiv.textContent = currentQuestion.options[key].text;
+        optionDiv.addEventListener('click', () => selectAnswer(key));
+        optionsContainer.appendChild(optionDiv);
+      }
+
+      // Hide the back button when not on the first question
+      backButton.style.display = currentQuestionIndex === 0 ? 'none' : 'block';
+    }
+
+    function selectAnswer(answer) {
+      const selectedOption = questions[currentQuestionIndex].options[answer];
+      userAnswers[currentQuestionIndex] = {
+        letter: selectedOption.letter
+      };
+      currentQuestionIndex++;
+
+      if (currentQuestionIndex < questions.length) {
+        showQuestion(currentQuestionIndex);
+      } else {
+        showGraph();
+      }
+    }
+
+    function showGraph() {
+      const counts = { D: 0, C: 0, E: 0, A: 0, B: 0 };
+
+      for (const answerObject of Object.values(userAnswers)) {
+        const selectedLetter = answerObject.letter;
+        counts[selectedLetter]++;
+      }
+
+      const data = Object.keys(counts).map(key => counts[key]);
+
+      // Hide question and options containers
+      questionContainer.style.display = 'none';
+      optionsContainer.style.display = 'none';
+
+      // Clear the existing chart if it exists
+      if (myChart) {
+        myChart.destroy();
+      }
+
+      // Show the chart container
+      chartContainer.style.display = 'block';
+
+      // Create the new chart
+      const ctx = chartCanvas.getContext('2d');
+      myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(counts),
+          datasets: [{
+            data,
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4CAF50', '#9C27B0'],
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          title: {
+            display: true,
+            text: 'Distribution of Answers',
+            fontSize: 16,
+            fontColor: '#333',
+          },
+          legend: {
+            display: false,
+          },
+        },
+      });
+
+      // Add legend
+      for (const key in counts) {
+        const legendItem = document.createElement('li');
+        const legendColor = document.createElement('span');
+        legendColor.style.backgroundColor = getColor(key);
+        legendItem.appendChild(legendColor);
+        legendItem.appendChild(document.createTextNode(` ${key}`));
+        chartLegend.appendChild(legendItem);
+      }
+
+      // Hide the back button when the chart is displayed
+      backButton.style.display = 'none';
+
+      // Show personal information above the chart
+      showPersonalInfo();
+    }
+
+    function clearChart() {
+      if (myChart) {
+        myChart.destroy();
+      }
+      chartLegend.innerHTML = '';
+    }
+
+    function getColor(letter) {
+      const colorMap = {
+        A: '#FF6384',
+        B: '#36A2EB',
+        C: '#FFCE56',
+        D: '#4CAF50',
+        E: '#9C27B0',
+      };
+      return colorMap[letter];
+    }
+
+    // Function to show personal information
+    function showPersonalInfo() {
+      const name = document.getElementById('name').value;
+      const familyName = document.getElementById('family-name').value;
+      const nationalCode = document.getElementById('national-code').value;
+      const age = document.getElementById('age').value;
+      const education = document.getElementById('education').value;
+      const job = document.getElementById('job').value;
+      const marriageDate = document.getElementById('marriage-date').value;
+
+      const personalInfoDiv = document.createElement('div');
+      personalInfoDiv.innerHTML = `<strong>نام:</strong> ${name} | <strong>نام خانوادگی:</strong> ${familyName} | <strong>کد ملی:</strong> ${nationalCode} | <strong>سن:</strong> ${age} | <strong>تحصیلات:</strong> ${education} | <strong>شغل:</strong> ${job} | <strong>تاریخ ازدواج:</strong> ${marriageDate}`;
+
+      // Append personal information above the chart
+      quizContainer.insertBefore(personalInfoDiv, chartContainer);
+    }
+
+    // Function to start the quiz
+    function startQuiz() {
+  // Validate primary information fields
+  const name = document.getElementById('name').value;
+  const familyName = document.getElementById('family-name').value;
+  const nationalCode = document.getElementById('national-code').value;
+  const age = document.getElementById('age').value;
+  const education = document.getElementById('education').value;
+  const job = document.getElementById('job').value;
+  const marriageDate = document.getElementById('marriage-date').value;
+
+  if (!name || !familyName || !nationalCode || !age || !education || !job || !marriageDate) {
+    alert('لطفاً تمام اطلاعات را به درستی وارد کنید.');
+    return;
+  }
+
+  // Hide personal information container
+  personalInfoContainer.style.display = 'none';
+
+  // Show the first question
+  showQuestion(currentQuestionIndex);
+}
+
+  </script>
+</body>
+</html>
