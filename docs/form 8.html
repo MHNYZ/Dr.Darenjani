@@ -165,8 +165,8 @@
       <input type="text" id="job" name="job" required><br>
 
       <label for="marriage-date">تاریخ ازدواج:</label>
-      <label for="marriage-date">Marriage Date (dd/mm/yyyy):</label>
-      <input type="text" id="marriage-date" name="marriage-date" pattern="\d{1,2}/\d{1,2}/\d{4}" placeholder="dd/mm/yyyy" required>
+      <label for="marriage-date">تاریخ ازدواج (dd/mm/yyyy):</label>
+      <input type="text" id="marriage-date" name="marriage-date" placeholder="dd/mm/yyyy" required><br>
       <small>Format: dd/mm/yyyy</small>
 
       <button onclick="startQuiz()">شروع آزمون</button>
@@ -183,16 +183,36 @@
   </div>
   <script>
  // Add event listener to validate the input format
-  document.getElementById('marriage-date').addEventListener('input', function() {
-    var inputValue = this.value;
-    var datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+// Add this code inside the script tag in the head or body of your HTML
+const marriageDateInput = document.getElementById('marriage-date');
 
-    if (!datePattern.test(inputValue)) {
-      this.setCustomValidity('Please use the format dd/mm/yyyy');
-    } else {
-      this.setCustomValidity('');
-    }
-  });
+marriageDateInput.addEventListener('input', handleDateInput);
+
+function handleDateInput() {
+  const inputValue = marriageDateInput.value;
+  const formattedValue = formatDateString(inputValue);
+
+  marriageDateInput.value = formattedValue;
+}
+
+function formatDateString(input) {
+  // Format input as dd/mm/yyyy
+  // This is a basic example, you might want to add more validation
+  const regex = /^(\d{0,2})(\/)?(\d{0,2})$/;
+  const parts = input.match(regex);
+
+  if (!parts) return '';
+
+  const day = parts[1];
+  const month = parts[3];
+
+  if (day && month) {
+    return `${day}/${month}`;
+  }
+
+  return input;
+}
+
 
 
 
