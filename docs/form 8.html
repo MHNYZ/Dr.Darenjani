@@ -165,7 +165,9 @@
       <input type="text" id="job" name="job" required><br>
 
       <label for="marriage-date">تاریخ ازدواج:</label>
-      <input type="date" id="marriage-date" name="marriage-date" required><br>
+      <label for="marriage-date">Marriage Date (dd/mm/yyyy):</label>
+      <input type="text" id="marriage-date" name="marriage-date" pattern="\d{1,2}/\d{1,2}/\d{4}" placeholder="dd/mm/yyyy" required>
+      <small>Format: dd/mm/yyyy</small>
 
       <button onclick="startQuiz()">شروع آزمون</button>
     </div>
@@ -180,6 +182,21 @@
     <button id="backButton" style="margin-top: 10px;">بازگشت به سوال قبلی</button>
   </div>
   <script>
+ // Add event listener to validate the input format
+  document.getElementById('marriage-date').addEventListener('input', function() {
+    var inputValue = this.value;
+    var datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+
+    if (!datePattern.test(inputValue)) {
+      this.setCustomValidity('Please use the format dd/mm/yyyy');
+    } else {
+      this.setCustomValidity('');
+    }
+  });
+
+
+
+    
 const questions = [
       { 
         question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
