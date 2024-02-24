@@ -153,7 +153,7 @@
       <input type="text" id="family-name" name="family-name" required><br>
 
       <label for="national-code">کد ملی:</label>
-      <input type="text" id="national-code" name="national-code" required><br>
+      <input type="number" id="national-code" name="national-code" required><br>
 
       <label for="age">سن:</label>
       <input type="number" id="age" name="age" required><br>
@@ -165,7 +165,7 @@
       <input type="text" id="job" name="job" required><br>
 
       <label for="marriage-date">تاریخ ازدواج:</label>
-      <input type="text" id="marriage-date" name="marriage-date" placeholder="dd/mm/yyyy" required><br>
+      <input type="number" id="marriage-date" name="marriage-date" placeholder="dd/mm/yyyy" required><br>
 
       <button onclick="startQuiz()">شروع آزمون</button>
     </div>
@@ -177,6 +177,9 @@
       <canvas id="chart" width="300" height="300"></canvas>
       <ul id="chart-legend"></ul>
     </div>
+	<!-- Add this button after the chart and summary -->
+<button id="sendResultsButton" onclick="sendResults()">ارسال نتایج به واتساپ</button>
+
     <button id="backButton" style="margin-top: 10px;">بازگشت به سوال قبلی</button>
   </div>
   <script>
@@ -221,7 +224,7 @@ function handleDateInput() {
     
 const questions = [
       { 
-        question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
+ question: 'برام لذت‌بخش و ارزشمنده وقتی که ...؟',
         options: {
           a: { text: 'بدون هیچ دلیلی؛ یه متن ،‌ ایمیل ،‌ پیامک و ... عاشقانه از معشوقم دریافت می‌کنم', letter: 'A' },
           b: { text: 'همدیگر رو بغل می‌کنیم', letter: 'E' }
@@ -571,37 +574,33 @@ const questions = [
     },
   });
 
-  // Display selected options quantity in a styled and centered table above the chart
-  const summaryContainer = document.createElement('div');
-  summaryContainer.innerHTML = `
-    <div style="text-align: center; margin-top: 20px;">
-      <h3 style="color: #333; margin-bottom: 10px;">تعداد گزینه های انتخاب شده</h3>
-      <table border="1" cellpadding="10" style="margin: 0 auto; border-collapse: collapse;">
-        <tr>
-          <td>Count</td>
-          ${Object.values(counts).map(count => `<td>${count}</td>`).join('')}
-        </tr>
-        <tr>
-          <td>Option</td>
-          ${Object.keys(counts).sort().map(key => `<td>${key}</td>`).join('')}
-        </tr>
-      </table>
-    </div>
-  `;
+ // Display selected options quantity in a styled and centered table above the chart
+const summaryContainer = document.createElement('div');
+summaryContainer.style.textAlign = 'center';
+summaryContainer.style.marginTop = '20px';
 
-  // Append an empty space between the table and the chart
-  quizContainer.appendChild(document.createElement('div')).style.marginBottom = '20px';
+summaryContainer.innerHTML = `
+  <h3 style="color: #333; margin-bottom: 10px;">تعداد گزینه های انتخاب شده</h3>
+  <table border="1" cellpadding="10" style="margin: 0 auto; border-collapse: collapse;">
+    <tr>
+      <td>Count</td>
+      ${Object.values(counts).map(count => `<td>${count}</td>`).join('')}
+    </tr>
+    <tr>
+      <td>Option</td>
+      ${Object.keys(counts).sort().map(key => `<td>${key}</td>`).join('')}
+    </tr>
+  </table>
+`;
 
-  // Append the table above the chart
-  quizContainer.appendChild(summaryContainer);
+// Append the table above the chart
+quizContainer.appendChild(summaryContainer);
 
-  // Hide the back button when the chart is displayed
-  backButton.style.display = 'none';
+// Show the sendResultsButton
+const sendResultsButton = document.getElementById('sendResultsButton');
+sendResultsButton.removeAttribute('hidden');
 
-  // Show personal information above the chart
-  showPersonalInfo();
 }
-
 
 
 
@@ -666,6 +665,56 @@ const questions = [
   // Show the first question
   showQuestion(currentQuestionIndex);
 }
+
+//whatsapp
+function sendResults() {
+    const counts = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+
+    for (const answerObject of Object.values(userAnswers)) {
+      const selectedLetter = answerObject.letter;
+      counts[selectedLetter]++;
+    }
+
+    const name = document.getElementById('name').value;
+    const familyName = document.getElementById('family-name').value;
+    const nationalCode = document.getElementById('national-code').value;
+    const age = document.getElementById('age').value;
+    const education = document.getElementById('education').value;
+    const job = document.getElementById('job').value;
+    const marriageDate = document.getElementById('marriage-date').value;
+
+    let resultsText = `
+      نتایج آزمون:
+      نام: ${name}
+      نام خانوادگی: ${familyName}
+      کد ملی: ${nationalCode}
+      سن: ${age}
+      تحصیلات: ${education}
+      شغل: ${job}
+      تاریخ ازدواج: ${marriageDate}
+      
+      تعداد گزینه‌های انتخاب شده:
+    `;
+
+    Object.entries(counts).forEach(([key, count]) => {
+      resultsText += `\n${key}: ${count}`;
+    });
+
+    // Copy the results to the clipboard
+    navigator.clipboard.writeText(resultsText).then(() => {
+      alert('نتایج کپی شد!');
+
+      // Open WhatsApp with a specific phone number
+      const phoneNumber = '123456789'; // Replace with the desired phone number
+      window.location.href = `whatsapp://send?text=${encodeURIComponent(resultsText)}&phone=${encodeURIComponent(phoneNumber)}`;
+    }).catch((error) => {
+      console.error('Error copying to clipboard:', error);
+      alert('مشکلی در کپی کردن نتایج به وجود آمده است.');
+    });
+  }
+
+
+
 
   </script>
 </body>
