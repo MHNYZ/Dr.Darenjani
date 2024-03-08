@@ -244,6 +244,7 @@ function handleDateInput() {
 const questions = [
   //q1
   {
+  {
     question: 'ایجاد ارتباط با دیگران برایم آسان است.',
     options: {
       a: { text: 'کاملا مخالفم', value: 1 },
@@ -256,6 +257,209 @@ const questions = [
     category: 'iemen' // Assign a category to each question
   },
   //q2
+  {
+    question: 'خیلی سخت به خودم اجازه می دهم که به دیگران وابسته باشم.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: 'ejtenabi' // Assign a category to each question
+  },
+  //q3
+  {
+    question: 'در روابطم اغلب نگرانم که طرف مقابل واقعا دوستم نداشته باشد.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: '2sugera' // Assign a category to each question
+  },
+  //q4
+  {
+    question: 'آنقدر که من دوست دارم به دیگران نزدیک شوم، دیگران به اندازه من تمایل به این ارتباط ندارند.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: '2sugera' // Assign a category to each question
+  },
+  //q5
+  {
+    question: 'من با تکیه کردن به دیگران راحت هستم.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 4 },
+      b: { text: 'تا حدی مخالفم', value: 3 },
+      c: { text: 'نه مخالف و نه موافقم', value: 2 },
+      d: { text: 'تا حدی موافقم', value: 1 },
+      e: { text: 'کاملا موافقم', value: 0 }
+    },
+    category: 'ejtenabi' // Assign a category to each question
+  },
+  //q6
+  {
+    question: 'از اینکه کسی به من نزدیک شود ناراحت نمی شوم.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 4 },
+      b: { text: 'تا حدی مخالفم', value: 3 },
+      c: { text: 'نه مخالف و نه موافقم', value: 2 },
+      d: { text: 'تا حدی موافقم', value: 1 },
+      e: { text: 'کاملا موافقم', value: 0 }
+    },
+    category: 'iemen' // Assign a category to each question
+  },
+  //q7
+  {
+    question: 'فکر می کنم وقتی به دیگران احتیاج دارم هیچگاه در دسترس نیستند.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: 'ejtenabi' // Assign a category to each question
+  },
+  //q8
+  {
+    question: 'از اینکه به مردم نزدیک باشم راحت نیستم.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 4 },
+      b: { text: 'تا حدی مخالفم', value: 3 },
+      c: { text: 'نه مخالف و نه موافقم', value: 2 },
+      d: { text: 'تا حدی موافقم', value: 1 },
+      e: { text: 'کاملا موافقم', value: 0 }
+    },
+    category: 'iemen' // Assign a category to each question
+  },
+  //q9
+  {
+    question: 'در روابطم اغلب نگرانم که طرف مقابلم نخواهد ارتباطش را با من ادامه دهد.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: '2sugera' // Assign a category to each question
+  },
+  //q10
+  {
+    question: 'وقتی احساساتم را به دیگران نشان می دهم، می ترسم که آنها همان احساس را درباره من نداشته باشند.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: '2sugera' // Assign a category to each question
+  },
+  //q11
+  {
+    question: 'در ارتباطاتم اغلب از خود می پرسم آیا طرف مقابل واقعا به من توجه دارد.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: '2sugera' // Assign a category to each question
+  },
+  //q12
+  {
+    question: '.به راحتی می توانم با دیگران روابط دوستانه نزدیک برقرار کنم.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: 'iemen' // Assign a category to each question
+  },
+  //q13
+  {
+    question: 'وقتی کسی خیلی با من صمیمی می شود، احساس راحتی نمی کنم.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: 'iemen' // Assign a category to each question
+  },
+  //q14
+  {
+    question: '.می دانم وقتی که به دیگران نیاز داشته باشم، آنها در دسترس خواهند بود',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: 'ejtenabi' // Assign a category to each question
+  },
+  //q15
+  {
+    question: 'دلم می خواهد به مردم نزدیک شوم اما می ترسم به من صدمه بزنند.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 1 },
+      b: { text: 'تا حدی مخالفم', value: 2 },
+      c: { text: 'نه مخالف و نه موافقم', value: 3 },
+      d: { text: 'تا حدی موافقم', value: 4 },
+      e: { text: 'کاملا موافقم', value: 5 }
+    },
+    category: '2sugera' // Assign a category to each question
+  },
+  //q16
+  {
+    question: 'فکر می کنم مشکل است که آدم به دیگران کاملا اعتماد کند.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 4 },
+      b: { text: 'تا حدی مخالفم', value: 3 },
+      c: { text: 'نه مخالف و نه موافقم', value: 2 },
+      d: { text: 'تا حدی موافقم', value: 1 },
+      e: { text: 'کاملا موافقم', value: 0 }
+    },
+    category: 'ejtenabi' // Assign a category to each question
+  },
+  //q17
+  {
+    question: 'اغلب افراد می خواهند با من صمیمی تر از آن حدی بشوند که من احساس راحتی می کنم.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 4 },
+      b: { text: 'تا حدی مخالفم', value: 3 },
+      c: { text: 'نه مخالف و نه موافقم', value: 2 },
+      d: { text: 'تا حدی موافقم', value: 1 },
+      e: { text: 'کاملا موافقم', value: 0 }
+    },
+    category: 'iemen' // Assign a category to each question
+  },
+  //q18
+  {
+    question: 'مطمئن نیستم بتوانم به افرادی تکیه کنم که به هنگام نیاز در دسترس باشند.',
+    options: {
+      a: { text: 'کاملا مخالفم', value: 4 },
+      b: { text: 'تا حدی مخالفم', value: 3 },
+      c: { text: 'نه مخالف و نه موافقم', value: 2 },
+      d: { text: 'تا حدی موافقم', value: 1 },
+      e: { text: 'کاملا موافقم', value: 0 }
+    },
+    category: 'ejtenabi' // Assign a category to each question
+  },
 
 
 
