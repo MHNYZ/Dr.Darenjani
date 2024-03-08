@@ -674,7 +674,7 @@ function sendResults() {
   const marriageDate = document.getElementById('marriage-date').value;
 
   let resultsText = `
-    نتایج آزمون:
+    نتیجه آزمون تست سبک دلبستگی بزرگسالان:
     نام: ${name}
     نام خانوادگی: ${familyName}
     کد ملی: ${nationalCode}
@@ -683,14 +683,13 @@ function sendResults() {
     شغل: ${job}
     تاریخ ازدواج: ${marriageDate}
 
-    خلاصه تست سبک دلبستگی بزرگسالان (RAAS):
   `;
 
   Object.entries(counts).forEach(([key, count]) => {
     resultsText += `\n${key}: ${count}`;
   });
 
-  resultsText += `\n\nCategory Sums:\niemen Sum: ${iemenSum}\nejtenabi Sum: ${ejtenabiSum}\n2sugera Sum: ${sugera2Sum}`;
+  resultsText += `\n\nCategory Sums:\n دلبستگی ایمن: ${iemenSum}\n دلبستگی اجتنابی: ${ejtenabiSum}\n دلبستگی دوسوگرا: ${sugera2Sum}`;
 
   // Copy the results to the clipboard
   navigator.clipboard.writeText(resultsText).then(() => {
